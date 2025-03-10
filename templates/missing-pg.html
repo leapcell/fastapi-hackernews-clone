@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News Clone</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+                --color-clifford: #111827;
+            }
+    
+            body {
+                background-color: var(--color-clifford);
+            }
+    
+            img {
+                max-width: 90%;
+                padding: 1rem 0;
+            }
+        </style>
+</head>
+
+<body class="bg-[#111827] text-white antialiased dark:bg-gray-950 dark:text-white">
+    <div class="container mx-auto py-8">
+        <header class="flex w-full items-center gap-6 border-b border-gray-800 py-4 text-sm text-gray-400">
+            <a class="text-base font-bold text-gray-300 hover:underline" href="/">Hacker News</a>
+        </header>
+        <div class="py-4">
+            <h2 class="text-2xl font-bold">Add Post</h2>
+            <form action="/new" method="post" class="max-w-md rounded space-y-2 py-4 ">
+                <label for="title" class="block text-sm font-medium text-white">Title</label>
+                <input type="text" id="title" name="title"
+                    class="flex  w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
+                    required>
+                <label for="link" class="block text-sm font-medium text-white">Link</label>
+                <input type="text" id="link" name="link"
+                    class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    required>
+                <label for="content" class="block text-sm font-medium text-white mt-4">Content</label>
+                <textarea id="content" name="content" required
+                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"></textarea>
+                <button
+                    class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-secondary/80 h-9 rounded-md px-3 mt-4 cursor-pointer"
+                    type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="grid w-full grid-cols-1">
+            <div class="max-w-5xl mx-auto shadow-lg rounded-lg p-6 mt-2 bg-white text-black">
+                <h1 class="text-2xl font-bold text-red-600 flex items-center">
+                    🫢 PostgreSQL Connection String Not Detected
+                </h1>
+                <p class="mt-2">
+                    We were unable to detect a valid <strong>PostgreSQL connection string</strong>.
+                    Please verify that the relevant <strong>environment variable(<code
+                            class="bg-gray-200 px-1 py-0.5 rounded">DATABASE_DSN</code>)</strong> is correctly configured.
+                </p>
+
+                <img src="https://cdn1.leapcellcdn.com/4135667917Group77.png" alt="Missing PostgreSQL DSN"
+                    class="w-full mt-4 mx-4 rounded-lg shadow">
+
+                <h2 class="text-xl font-semibold mt-6">Why is this happening?</h2>
+                <p class="mt-2">
+                    Since <strong><a href="https://leapcell.io" target="_blank">Leapcell</a> operates in a fully
+                        serverless environment</strong>,
+                    it <strong>does not provide</strong> a managed PostgreSQL database or other persistent storage
+                    solutions.
+                    To use PostgreSQL, you must provision a <strong>database instance</strong> from a
+                    <strong>third-party PostgreSQL provider</strong>.
+                </p>
+                <p class="mt-2">
+                    Once you have obtained a database instance, <a href="https://leapcell.io"
+                        target="_blank">Leapcell</a> can
+                    <strong>connect to your instance over TCP</strong>. The following code demonstrates how to create a
+                    table and insert data into it.
+                </p>
+
+                <h2 class="text-xl font-semibold mt-6">Configuring Your PostgreSQL Connection</h2>
+                <ul class="list-decimal list-inside mt-2 space-y-2">
+                    <li>Acquire a <strong>PostgreSQL instance</strong> from a third-party provider.</li>
+                    <li>Retrieve the <strong>connection string</strong> from the provider’s dashboard.</li>
+                    <li>In <strong>
+                            <a href="https://leapcell.io" target="_blank" class="underline">Leapcell</a>
+                        </strong>, navigate to <strong>Environment Variables</strong>
+                        and set <code class="bg-gray-200 px-1 py-0.5 rounded">DATABASE_DSN</code> to the provided
+                        <strong>connection string</strong>
+                        (e.g., <code>&lt;postgresql://user:abcd@pooler.usxx.leap.cell/postgre&gt;</code>).
+                    </li>
+                    <img src="https://cdn1.leapcellcdn.com/4098608656env-pic2.png" alt="Environment Variables"
+                        class="w-[50%] mt-4 mx-4 rounded-lg shadow">
+                    <li>After completing the setup, you may proceed with invoking your service.</li>
+                </ul>
+
+                <p class="mt-4 text-blue-600">📌 <strong>For reference, explore this example repository:</strong></p>
+                <p class="mt-2 font-semibold">
+                    <a href="https://github.com/leapcell/fastapi-hackernews-clone" class="text-blue-500 underline py-4"
+                        target="_blank">
+                        GitHub - fastapi-hackernews-clone
+                    </a>
+                </p>
+
+                <h2 class="text-xl font-semibold mt-6">🌟 Recommended Free-Tier PostgreSQL Providers</h2>
+                <p class="mt-2">
+                    The following providers offer <strong>free-tier PostgreSQL instances</strong>.
+                    Please refer to their official documentation for specific terms and conditions.
+                </p>
+
+                <div class="mt-4">
+                    <h3 class="text-lg font-semibold">1️⃣ Supabase</h3>
+                    <p class="mt-1">
+                        <a href="https://supabase.com" class="text-blue-500 underline">Supabase</a> provides a
+                        <strong>PostgreSQL DBaaS</strong> solution.
+                        After setting up a database, navigate to the <strong>"Connect"</strong> section in the dashboard
+                        to obtain your <strong>connection string</strong>.
+                    </p>
+                    <p class="mt-1 text-red-600">📌 Important: Use the <strong>"Session Pooler"</strong> connection
+                        method.</p>
+                    <pre
+                        class="bg-gray-200 p-3 rounded mt-2 overflow-x-auto">postgresql://postgres.abcdxxx:[YOUR-PASSWORD]@aws-0-us-east-1.pooler.supabase.com:5432/postgres</pre>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold">2️⃣ Neon.tech</h3>
+                    <p class="mt-1">
+                        <a href="https://neon.tech" class="text-blue-500 underline">Neon.tech</a> is a
+                        <strong>serverless PostgreSQL provider</strong>.
+                        After creating a database, select the <strong>"Connect"</strong> option on the dashboard to
+                        obtain the required <strong>connection string</strong>.
+                    </p>
+                    <pre
+                        class="bg-gray-200 p-3 rounded mt-2 overflow-x-auto">postgresql://neondb_owner:abcd@ep-nameless-qwe-abcd-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require</pre>
+                </div>
+
+
+                <div class="mt-6 space-y-1">
+                    <h2 class="text-xl font-semibold">🚀 Next Steps</h2>
+                    <p class="mt-2">
+                        For further assistance, please visit <a href="https://leapcell.io">Leapcell</a>'s official
+                        documentation or
+                        join our community discussions. 🚀
+                    </p>
+                    <div>
+                        <a href="https://docs.leapcell.io" class="text-blue-500 underline mt-4" target="_blank">📕
+                            Leapcell
+                            Documentation</a>
+                    </div>
+                    <div>
+                        <a href="https://discord.gg/qF7efny8x2" class="text-blue-500 underline mt-2" target="_blank">🌐
+                            Leapcell
+                            Discord</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

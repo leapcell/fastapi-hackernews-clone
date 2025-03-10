@@ -6,16 +6,21 @@ import urllib.parse
 from models import Post, Comment, get_db, check_and_update_tables
 from datetime import datetime
 
-# Initialize a FastAPI application instance
+# Initialize a FastAPI application
 app = FastAPI()
 
-# Set up Jinja2 templates, specifying the template directory
+# Set up Jinja2 templates with the specified directory
 templates = Jinja2Templates(directory="templates")
 
 
-# Route for the home page, returns HTML response
+# Home page route, returns an HTML response
 @app.get("/", response_class=HTMLResponse)
-def index(request: Request, db: Session = Depends(get_db)):
+def index(request: Request):
+    # Get a database session
+    db = get_db()
+    if not db:
+        # Return a template page indicating missing PostgreSQL connection
+        return templates.TemplateResponse("missing-pg.html", {"request": request})
     # Check and update database tables
     check_and_update_tables()
     # Query all posts and sort them by creation time in descending order
@@ -28,48 +33,57 @@ def index(request: Request, db: Session = Depends(get_db)):
             "content": post.content,
             "created_at": post.created_at,
             "link": post.link,
-            # Extract the hostname from the link if it exists
+            # Extract hostname from the link if available
             "host": urllib.parse.urlparse(post.link).hostname if post.link else None,
-            # Count the number of comments for each post
+            # Count comments for each post
             "comment_count": db.query(Comment)
             .filter(Comment.post_id == post.id)
             .count(),
         }
         for post in posts
     ]
-    # Render the index page with the processed post data
+    # Render the index page with processed post data
     return templates.TemplateResponse(
         "index.html", {"request": request, "posts": posts}
     )
 
 
-# Route for creating a new post, handles POST requests
+# Route to create a new post, handles POST requests
 @app.post("/new")
 def new_post(
     request: Request,
     title: str = Form(...),
     content: str = Form(...),
     link: str = Form(...),
-    db: Session = Depends(get_db),
 ):
+    # Get a database session
+    db = get_db()
+    if not db:
+        # Redirect to the home page if database connection fails
+        return RedirectResponse(url="/", status_code=303)
     # Create a new post object
     new_post = Post(title=title, content=content, link=link)
     # Add the new post to the database session
     db.add(new_post)
-    # Commit the changes to the database
+    # Commit changes to the database
     db.commit()
-    # Refresh the new post object to get the latest data from the database
+    # Refresh the new post object
     db.refresh(new_post)
     # Redirect to the home page
     return RedirectResponse(url="/", status_code=303)
 
 
-# Route for viewing a single post's details, returns HTML response
+# Route to view a single post's details, returns an HTML response
 @app.get("/post/{post_id}", response_class=HTMLResponse)
-def post_detail(request: Request, post_id: int, db: Session = Depends(get_db)):
+def post_detail(request: Request, post_id: int):
+    # Get a database session
+    db = get_db()
+    if not db:
+        # Redirect to the home page if database connection fails
+        return RedirectResponse(url="/", status_code=303)
     # Query the post by its ID
     post = db.query(Post).filter(Post.id == post_id).first()
-    # Render the post detail page with the post and its comment data
+    # Render the post detail page with post and comment data
     return templates.TemplateResponse(
         "post_detail.html",
         {
@@ -80,7 +94,7 @@ def post_detail(request: Request, post_id: int, db: Session = Depends(get_db)):
                 "content": post.content,
                 "created_at": post.created_at,
                 "link": post.link,
-                # Extract the hostname from the link if it exists
+                # Extract hostname from the link if available
                 "host": (
                     urllib.parse.urlparse(post.link).hostname if post.link else None
                 ),
@@ -97,9 +111,14 @@ def post_detail(request: Request, post_id: int, db: Session = Depends(get_db)):
     )
 
 
-# Route for adding a comment to a post, handles POST requests
+# Route to add a comment to a post, handles POST requests
 @app.post("/post/{post_id}/comment")
-def add_comment(post_id: int, content: str = Form(...), db: Session = Depends(get_db)):
+def add_comment(post_id: int, content: str = Form(...)):
+    # Get a database session
+    db = get_db()
+    if not db:
+        # Redirect to the home page if database connection fails
+        return RedirectResponse(url="/", status_code=303)
     # Query the post by its ID
     post = db.query(Post).filter(Post.id == post_id).first()
     if post:
@@ -107,9 +126,9 @@ def add_comment(post_id: int, content: str = Form(...), db: Session = Depends(ge
         comment = Comment(content=content, post=post)
         # Add the new comment to the database session
         db.add(comment)
-        # Commit the changes to the database
+        # Commit changes to the database
         db.commit()
-        # Refresh the new comment object to get the latest data from the database
+        # Refresh the new comment object
         db.refresh(comment)
         # Redirect to the post detail page
         return RedirectResponse(url=f"/post/{post_id}", status_code=303)

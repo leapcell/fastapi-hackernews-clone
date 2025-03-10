@@ -2,3 +2,4 @@ fastapi
 sqlalchemy
 jinja2
 urllib3
+psycopg2-binary

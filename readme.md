@@ -18,6 +18,7 @@ This is a simple Hacker News clone built with FastAPI and PostgreSQL. The purpos
 ├── requirements.txt      # Project dependencies
 └── templates/            # HTML templates for rendering views
     ├── index.html        # Homepage displaying the list of posts
+    ├── missing-pg.html   # PG missing
     └── post_detail.html  # Template for displaying post details
 ```
 
