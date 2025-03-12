@@ -4,3 +4,4 @@ jinja2
 urllib3
 psycopg2-binary
 uvicorn[standard]
+python-multipart
